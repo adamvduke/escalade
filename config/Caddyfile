@@ -1,0 +1,4 @@
+docker:80 {
+  root /srv/caddy/public
+  log /dev/stdout
+}
