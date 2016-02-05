@@ -1,5 +1,7 @@
 # Escalade
 
+[![](https://badge.imagelayers.io/adamvduke/escalade:latest.svg)](https://imagelayers.io/?images=adamvduke/escalade:latest 'Get your own badge on imagelayers.io')
+
 It's a box shaped [caddy](https://caddyserver.com).
 
 Serve a static site with caddy
