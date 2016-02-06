@@ -1,5 +1,5 @@
 FROM scratch
-MAINTAINER adam.v.duke@gmail.com
+MAINTAINER Adam Duke <adam.v.duke@gmail.com>
 
 ENV SITE_ROOT /srv/caddy
 ENV CONFIG_DIR $SITE_ROOT/config/
