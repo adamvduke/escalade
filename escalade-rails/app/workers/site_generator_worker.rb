@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'open3'
 
 class SiteGeneratorWorker
   include Sidekiq::Worker
@@ -18,7 +19,9 @@ class SiteGeneratorWorker
   def compile_site(site, tmp_dir)
     destination = "#{srv_prefix}/#{site.domain_name}"
     FileUtils.rm_r(destination) if Dir.exist?(destination)
-    Kernel.exec("jekyll build --source #{tmp_dir} --destination #{destination}")
+    stdin, stdout, stderr = Open3.popen3("jekyll build --source #{tmp_dir} --destination #{destination}")
+    Sidekiq.logger.info "stdout: #{stdout.read}"
+    Sidekiq.logger.info "stderr: #{stderr.read}"
   end
 
   private
