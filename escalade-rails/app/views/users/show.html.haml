@@ -1,0 +1,9 @@
+%h3 User
+%p
+  Name:
+  = @user.name if @user.name
+%p
+  Email:
+  = @user.email if @user.email
+- @user.projects.each do |project|
+  %p= link_to project.vcs_url, user_project_path(@user, project)
