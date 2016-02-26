@@ -1,4 +1,4 @@
-class CaddyServerConfigGenerator
+class CaddyfileGenerator
 
   CONFIG_TEMPLATE = <<~EOS
     tlspages.adamvduke.com {
