@@ -20,6 +20,7 @@ class CaddyfileGenerator
 
   def generate
     configuration = render_configuration
+    archive_current_configuration
     write_configuration_file(configuration)
   end
 
@@ -27,6 +28,13 @@ class CaddyfileGenerator
     template = Erubis::Eruby.new(CONFIG_TEMPLATE)
     template.result(sites: Site.all.joins(:user),
                     serving_dir: serving_dir)
+  end
+
+  def archive_current_configuration
+    if File.exists?(caddyfile_path)
+      FileUtils.mkdir(caddy_config_archive_path) if !File.exists?(caddy_config_archive_path)
+      FileUtils.cp(caddyfile_path, archive_path(caddyfile_path))
+    end
   end
 
   def write_configuration_file(configuration)
@@ -40,6 +48,25 @@ class CaddyfileGenerator
   end
 
   def caddyfile_path
-    ENV.fetch("CADDYFILE_PATH") { File.join("..", "caddy", "config", "Caddyfile") }
+    ENV.fetch("CADDYFILE_PATH") { File.join(caddy_config_path, "Caddyfile") }
+  end
+
+  def caddy_config_path
+    File.join(caddy_path, "config")
+  end
+
+  def caddy_path
+    File.join("..", "caddy")
+  end
+
+  def archive_path(file_path)
+    contents = File.read(file_path)
+    digest = Digest::SHA1.hexdigest(contents)
+    archive_date_time = DateTime.now
+    File.join(caddy_config_archive_path, "Caddyfile-#{archive_date_time}-#{digest}")
+  end
+
+  def caddy_config_archive_path
+    File.join(caddy_config_path, "archive")
   end
 end
