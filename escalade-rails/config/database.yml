@@ -57,5 +57,5 @@ production:
   database: escalade_rails_production
   pool:     5
   username: escalade_rails_production
-  password:
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
   template: template0
