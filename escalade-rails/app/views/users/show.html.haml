@@ -5,5 +5,5 @@
 %p
   Email:
   = @user.email if @user.email
-- @user.projects.each do |project|
-  %p= link_to project.vcs_url, user_project_path(@user, project)
+- @user.sites.each do |site|
+  %p= link_to site.vcs_url, user_site_path(@user, site)
