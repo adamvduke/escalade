@@ -54,8 +54,8 @@ production:
   adapter:  postgresql
   host:     localhost
   encoding: unicode
-  database: escalade-rails_production
+  database: escalade_rails_production
   pool:     5
-  username: escalade-rails
+  username: escalade_rails_production
   password:
   template: template0
