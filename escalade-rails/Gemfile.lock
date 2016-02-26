@@ -266,6 +266,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   database_cleaner
   devise
+  erubis (~> 2.0)
   factory_girl_rails
   faker
   haml-rails
