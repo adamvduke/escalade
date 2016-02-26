@@ -40,6 +40,6 @@ class CaddyfileGenerator
   end
 
   def caddyfile_path
-    ENV.fetch("CADDYFILE_PATH") { File.join("tmp", "Caddyfile") }
+    ENV.fetch("CADDYFILE_PATH") { File.join("..", "caddy", "config", "Caddyfile") }
   end
 end
