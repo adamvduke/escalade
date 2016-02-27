@@ -8,7 +8,7 @@ class CaddyfileGenerator
         except /assets
       }
     }
-    import sites/*
+    import <%= File.join(caddy_config_path, "sites", "*") %>
   EOS
 
   SITE_TEMPLATE = <<~EOS
@@ -31,7 +31,8 @@ class CaddyfileGenerator
 
   def render_caddyfile
     template = Erubis::Eruby.new(CONFIG_TEMPLATE)
-    template.result(serving_dir: serving_dir)
+    template.result(serving_dir: serving_dir,
+                    caddy_config_path: caddy_config_path)
   end
 
   def render_site_configuration(site)
@@ -73,17 +74,6 @@ class CaddyfileGenerator
   end
 
   def caddy_path
-    File.join("..", "caddy")
-  end
-
-  def archive_path(file_path)
-    contents = File.read(file_path)
-    digest = Digest::SHA1.hexdigest(contents)
-    archive_date_time = DateTime.now
-    File.join(caddy_config_archive_path, "Caddyfile-#{archive_date_time}-#{digest}")
-  end
-
-  def caddy_config_archive_path
-    File.join(caddy_config_path, "archive")
+    ENV.fetch("CADDY_PATH") { File.join("/", "srv", "escalade", "caddy") }
   end
 end
