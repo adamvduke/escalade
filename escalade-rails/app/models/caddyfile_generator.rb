@@ -8,36 +8,53 @@ class CaddyfileGenerator
         except /assets
       }
     }
+    import sites/*
+  EOS
 
-    <% sites.each do |site| %>
+  SITE_TEMPLATE = <<~EOS
     <%= site.domain_name %> {
       root <%= File.join(serving_dir, site.domain_name) %>
       tls <%= site.user.email  %>
     }
-
-    <% end %>
   EOS
 
   def generate
-    configuration = render_configuration
-    archive_current_configuration
-    write_configuration_file(configuration)
-  end
+    caddyfile = render_caddyfile
+    write_caddyfile(caddyfile)
 
-  def render_configuration
-    template = Erubis::Eruby.new(CONFIG_TEMPLATE)
-    template.result(sites: Site.all.joins(:user),
-                    serving_dir: serving_dir)
-  end
-
-  def archive_current_configuration
-    if File.exists?(caddyfile_path)
-      FileUtils.mkdir(caddy_config_archive_path) if !File.exists?(caddy_config_archive_path)
-      FileUtils.cp(caddyfile_path, archive_path(caddyfile_path))
+    FileUtils.mkdir(caddy_site_config_path) if !File.exist?(caddy_site_config_path)
+    Site.all.each do |site|
+      configuration = render_site_configuration(site)
+      write_site_configuration(site, configuration)
     end
   end
 
-  def write_configuration_file(configuration)
+  def render_caddyfile
+    template = Erubis::Eruby.new(CONFIG_TEMPLATE)
+    template.result(serving_dir: serving_dir)
+  end
+
+  def render_site_configuration(site)
+    template = Erubis::Eruby.new(SITE_TEMPLATE)
+    configuration = template.result(serving_dir: serving_dir,
+                                    site: site)
+  end
+
+  def write_site_configuration(site, configuration)
+    File.open(site_configuration_file_path(site), "w") do |file|
+      file.puts(configuration)
+    end
+  end
+
+  def site_configuration_file_path(site)
+    File.join(caddy_site_config_path, site.domain_name)
+  end
+
+  def caddy_site_config_path
+    File.join(caddy_config_path, "sites")
+  end
+
+  def write_caddyfile(configuration)
     File.open(caddyfile_path, "w") do |file|
       file.puts configuration
     end
