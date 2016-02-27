@@ -1,0 +1,9 @@
+tlspages.adamvduke.com {
+  root <%= File.join(serving_dir, "escalade", "escalade-rails", "public") %>
+  tls adam.v.duke@gmail.com
+  proxy / localhost:5000 {
+  except /assets
+  }
+}
+
+import <%= File.join(caddy_config_path, "sites", "*") %>

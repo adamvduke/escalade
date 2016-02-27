@@ -1,22 +1,7 @@
 class CaddyfileGenerator
 
-  CONFIG_TEMPLATE = <<~EOS
-    tlspages.adamvduke.com {
-      root <%= File.join(serving_dir, "escalade", "escalade-rails", "public") %>
-      tls adam.v.duke@gmail.com
-      proxy / localhost:5000 {
-        except /assets
-      }
-    }
-    import <%= File.join(caddy_config_path, "sites", "*") %>
-  EOS
-
-  SITE_TEMPLATE = <<~EOS
-    <%= site.domain_name %> {
-      root <%= File.join(serving_dir, site.domain_name) %>
-      tls <%= site.user.email  %>
-    }
-  EOS
+  CONFIG_TEMPLATE = File.read(File.join(Rails.root, "lib", "caddy", "templates", "Caddyfile.erb")).freeze
+  SITE_TEMPLATE = File.read(File.join(Rails.root, "lib", "caddy", "templates", "site_config.erb")).freeze
 
   def generate
     caddyfile = render_caddyfile
@@ -61,16 +46,16 @@ class CaddyfileGenerator
     end
   end
 
+  def caddy_config_path
+    File.join(caddy_path, "config")
+  end
+
   def serving_dir
     ENV.fetch("CADDY_SERVING_DIR") { File.join("/", "srv") }
   end
 
   def caddyfile_path
     ENV.fetch("CADDYFILE_PATH") { File.join(caddy_config_path, "Caddyfile") }
-  end
-
-  def caddy_config_path
-    File.join(caddy_path, "config")
   end
 
   def caddy_path
