@@ -7,3 +7,21 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 user = CreateAdminService.new.call
 puts 'CREATED ADMIN USER: ' << user.email
+
+site = user.sites.find_or_create_by(
+  name: 'adamvduke.com',
+  domain_name: 'adamvduke.com',
+  vcs_url: 'https://github.com/adamvduke/adamvduke.github.com.git',
+  build_type: 'jekyll'
+)
+
+SiteGeneratorWorker.perform_async(site.id)
+
+site = user.sites.find_or_create_by(
+  name: 'alfather.com',
+  domain_name: 'alfather.com',
+  vcs_url: 'https://github.com/alfather/alfather.github.io.git',
+  build_type: 'jekyll'
+)
+
+SiteGeneratorWorker.perform_async(site.id)

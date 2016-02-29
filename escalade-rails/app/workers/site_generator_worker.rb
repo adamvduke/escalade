@@ -37,10 +37,6 @@ class SiteGeneratorWorker
 
   private
   def srv_prefix
-    if Rails.env.production?
-      '/srv'
-    else
-      "#{ENV['HOME']}/tmp/srv"
-    end
+    '/srv/sites'
   end
 end

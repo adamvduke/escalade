@@ -1,9 +1,15 @@
-tlspages.adamvduke.com {
-  root <%= File.join(serving_dir, "escalade", "escalade-rails", "public") %>
-  tls adam.v.duke@gmail.com
-  proxy / localhost:5000 {
-  except /assets
+<%= "#{caddy_domain_name}:#{caddy_port}" %> {
+  log <%= caddy_log_path %>
+  root <%= escalade_public_dir %>
+  tls <%= caddy_tls_email_address %>
+  proxy / <%= "#{escalade_host}:#{escalade_port}" %> {
+    proxy_header Host {host}
+    proxy_header X-Real-IP {remote}
+    proxy_header X-Forwarded-Proto {scheme}
+<%- if Rails.env.production? %>
+    except /assets
+<% end %>
   }
 }
 
-import <%= File.join(caddy_config_path, "sites", "*") %>
+import <%= caddy_sites_path %>

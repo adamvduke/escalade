@@ -2,6 +2,10 @@ class CaddyReloadWorker
   include Sidekiq::Worker
 
   def perform
+    `docker-compose restart escalade-caddy`
+  end
+
+  def old_perform
     pid = read_caddy_pid
     signal_reload(pid)
   end
