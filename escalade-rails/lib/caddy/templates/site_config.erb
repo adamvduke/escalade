@@ -1,0 +1,4 @@
+<%= site.domain_name %> {
+  root <%= File.join(serving_dir, site.domain_name) %>
+  tls <%= site.user.email  %>
+}

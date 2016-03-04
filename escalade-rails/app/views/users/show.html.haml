@@ -1,0 +1,9 @@
+%h3 User
+%p
+  Name:
+  = @user.name if @user.name
+%p
+  Email:
+  = @user.email if @user.email
+- @user.sites.each do |site|
+  %p= link_to site.vcs_url, user_site_path(@user, site)
