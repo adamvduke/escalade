@@ -32,10 +32,12 @@ services:
     volumes:
       - "${CADDY_CONFIG_DIR}:/srv/escalade/caddy/config"
       - "${CADDY_SITES_DIR}:/srv/sites"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     depends_on:
       - postgres
       - redis
   escalade-caddy:
+    container_name: escalade-caddy
     env_file:
       - ./env.env
     image: adamvduke/escalade-caddy-docker

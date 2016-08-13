@@ -2,7 +2,7 @@ class CaddyReloadWorker
   include Sidekiq::Worker
 
   def perform
-    `docker-compose restart escalade-caddy`
+    `echo -e "POST /containers/escalade-caddy/kill?signal=USR1 HTTP/1.0\r\n" | nc -U /var/run/docker.sock`
   end
 
   def old_perform

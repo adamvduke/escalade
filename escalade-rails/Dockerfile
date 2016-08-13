@@ -1,7 +1,7 @@
 FROM ruby:2.3.0
 MAINTAINER Adam Duke <adam.v.duke@gmail.com>
 
-RUN apt-get update && apt-get install -y cmake git libpq-dev postgresql-client nodejs
+RUN apt-get update && apt-get install -y cmake git libpq-dev postgresql-client nodejs netcat-openbsd
 
 ENV APP_DIR /srv/escalade-rails/current
 ENV BUNDLER_DIR /srv/escalade-rails/shared/vendor
