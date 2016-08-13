@@ -1,4 +1,5 @@
-<%= site.domain_name %> {
-  root <%= File.join(serving_dir, site.domain_name) %>
-  tls <%= site.user.email  %>
+<%= "#{site_domain_name}:#{site_port}" %> {
+  root <%= site_root %>
+  tls <%= site_tls_email_address %>
+  log <%= site_log_path %>
 }
